@@ -1,25 +1,41 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
 
-function Tracks(){
+function Tracks() {
+  const [accessToken, setAccessToken] = useState("");
+  const [artists, setArtists] = useState([]);
   const spotifyApi = new SpotifyWebApi();
-  const router = useRouter()
-  function getRecentlyPlayedArtists() {
-    spotifyApi.getMyRecentlyPlayedTracks().then(response => {
-    });
+
+  const getTopArtists = () => {
+    spotifyApi.getMyTopTracks()
+      .then((response: any) => {
+        setArtists(response.items);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
-  useEffect(() =>{
-  const accessToken = `${router.query.access_token}`
-  if(accessToken){
-    spotifyApi.setAccessToken(accessToken)
-    getRecentlyPlayedArtists()
-  }
-  },[])
-  
-  return(
-    <h1>asasfasf</h1>
-  )
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const accessToken = params.get('access_token');
+    if (accessToken) {
+      setAccessToken(accessToken);
+      spotifyApi.setAccessToken(accessToken);
+      getTopArtists();
+    }
+  }, []);
+
+  return (
+    <div>
+      <h1>My Top Artists</h1>
+      <ul>
+        {artists.map((artist: any) => (
+          <li key={artist.id}>{artist.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
+
 export default Tracks;
