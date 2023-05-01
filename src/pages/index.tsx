@@ -46,7 +46,7 @@ export default function Home() {
             className={`${poppins.className} text-white fold:text-2xl 
           xs:text-4xl sm:text-6xl`}
           >
-            My Spotify Tracks
+            Your Spotify Tracks
           </h1>
         </motion.div>
         <motion.div
