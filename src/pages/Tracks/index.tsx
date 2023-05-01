@@ -27,13 +27,29 @@ function Tracks() {
   }, []);
 
   return (
-    <div>
-      <h1>My Top Artists</h1>
-      <ul>
-        {artists.map((artist: any) => (
-          <li key={artist.id}>{artist.name}</li>
+    <div className="px-12 bg-zinc-950 text-white h-full">
+      <div className="w-full flex justify-center pt-8">
+      <h1 className="text-4xl">Your Top Spotify tracks</h1>
+      </div>
+      <div className="w-full flex justify-center pt-8">
+      <span className="">weekend</span>
+      <span className="">mouth</span>
+      <span className="">all time</span>
+      </div>
+
+        <div className="grid semi-md:grid-cols-3 sm:grid-cols-2 gap-6 mt-8">
+
+        {artists.map((artist: any, index) => (
+          <div  key={artist.id} className="flex items-center">
+            <span className="text-4xl w-10">{index + 1}</span>
+            <img className="h-24 ml-4 mr-4" alt={artist.name} src={artist.album.images[1].url}/>
+            <div className="flex flex-col semi-md:max-w-[12rem] break-words sm:max-w-[12rem]">
+            <span>{artist.name}</span>
+            <span>{artist.artists[0].name}</span>
+            </div>
+          </div>
         ))}
-      </ul>
+        </div>
     </div>
   );
 }
