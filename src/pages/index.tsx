@@ -19,7 +19,7 @@ export default function Home() {
 
     if (params) {
       router.push({
-        pathname: "/Tracks",
+        pathname: "/TopTracks",
         query: window.location.hash.substring(1),
       });
     }
