@@ -11,9 +11,9 @@ module.exports = {
       'lg': "1200px",
       "semi-md": "1085px",
       "md": "900px",
-       "sm": "623px",
-       'xs': '414px',
-       "fold": "280px"
+       "sm": "672px",
+       'xs': '442px',
+       "fold": "332px"
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
