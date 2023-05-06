@@ -1,4 +1,5 @@
 import { CardTracks } from "@/components/CardTracks";
+import { Footer } from "@/components/Footer";
 import { Loader } from "@/icons/Loader";
 import { Tracks } from "@/interfaces/Tracks";
 import { useState, useEffect } from "react";
@@ -33,9 +34,10 @@ function TopTracks() {
   }, []);
 
   return (
-    <div className="px-10 bg-zinc-950 text-white h-full">
+    <>
+    <div className="px-5 xs:px-10 text-white h-full">
       <div className="w-full flex justify-center pt-8">
-        <h1 className="text-4xl">Your Top Spotify tracks</h1>
+        <h1 className="text-[20px] xs:text-4xl">Your Top Spotify tracks</h1>
       </div>
       {isLoading ? <Loader/> : (
         <>
@@ -44,7 +46,7 @@ function TopTracks() {
         <span className="">mouth</span>
         <span className="">all time</span>
       </div>
-      <div className="grid semi-md:grid-cols-3 sm:grid-cols-2 gap-6 mt-8">
+      <div className="grid semi-md:grid-cols-3 sm:grid-cols-2 gap-6 my-8">
         {tracks.map((tracks: Tracks, index) => (
           <CardTracks
             id={tracks.id}
@@ -59,6 +61,8 @@ function TopTracks() {
       </>
       )}
     </div>
+    <Footer/>
+    </>
   );
 }
 

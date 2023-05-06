@@ -13,7 +13,7 @@ module.exports = {
       "md": "900px",
        "sm": "672px",
        'xs': '442px',
-       "fold": "332px"
+       "fold": "280px"
     },
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],

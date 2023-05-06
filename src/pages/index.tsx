@@ -44,7 +44,7 @@ export default function Home() {
         >
           <h1
             className={`${poppins.className} text-white fold:text-2xl 
-          xs:text-4xl sm:text-6xl`}
+          xs:text-4xl sm:text-6xl text-sm`}
           >
             Your Spotify Tracks
           </h1>
