@@ -37,7 +37,7 @@ export default function Home() {
       <div className="absolute h-screen w-full backdrop-brightness-50">
         <motion.div
           className="mt-20 w-full px-12 flex items-center flex-col 
-        sm:px-18 md:px-46 lg:px-80"
+          sm:px-18 md:px-46 lg:px-80"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
