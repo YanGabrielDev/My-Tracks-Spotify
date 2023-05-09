@@ -27,7 +27,7 @@ export default function Home() {
 
   function handleLogin() {
     const client_id = process.env.NEXT_PUBLIC_CIENT_ID;
-    const redirect_uri = "http://localhost:3000";
+    const redirect_uri = "https://my-tracks.vercel.app";
     const scope = "user-top-read"
     window.location.href = `https://accounts.spotify.com/authorize?response_type=token&client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
   }
