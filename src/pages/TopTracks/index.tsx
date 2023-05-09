@@ -1,23 +1,55 @@
-import { CardTracks } from "@/components/CardTracks";
+import { TopFiveTracks } from "@/components/TopFiveTracks";
 import { Footer } from "@/components/Footer";
 import { Loader } from "@/icons/Loader";
-import { Tracks } from "@/interfaces/Tracks";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SpotifyWebApi from "spotify-web-api-js";
+import * as htmlToImage from 'html-to-image';
+import SpotifyIcon from "@/icons/SpotifyIcon";
+
+
+type TimeRange = "long_term" | "short_term" | "medium_term"
 
 function TopTracks() {
-  const [tracks, setTracks] = useState<Array<Tracks>>([]);
+  const domEl = useRef<HTMLDivElement>(null);
+  const [tracks, setTracks] = useState<SpotifyApi.TrackObjectFull[]>([]);
   const [isLoading, setIsloading] = useState<boolean>(true);
+  const [typeTime, setTypeTime] = useState<TimeRange>("long_term");
+  const [limitTracks, setLimitTracks] = useState<number>(5)
+
   const spotifyApi = new SpotifyWebApi();
-  const [typeTime, setTypeTime] = useState<string>("");
+
+  const handleCapture = async () => {
+    if (domEl.current) {
+      const dataUrl = await htmlToImage.toPng(domEl.current);
+
+      // download image
+      const link = document.createElement("a");
+      link.download = "html-to-img.png";
+      link.href = dataUrl;
+      link.click();
+    }
+  }
+  const showTypeTime = (): string => {
+    switch(typeTime) {
+      case "long_term":
+        return "All Time";
+      case "short_term":
+        return "Weekend";
+      case "medium_term":
+        return "Mouth";
+      default:
+        return "";
+    }
+  };
+
   //Chama a request tracks
   const getTopTracks = (
-    time_range: "long_term" | "short_term" | "medium_term"
+    timeRange: TimeRange, limit: number
   ) => {
-    setTypeTime(time_range);
+    setTypeTime;
     spotifyApi
-      .getMyTopTracks({ time_range: time_range })
-      .then((response: any) => {
+      .getMyTopTracks({ time_range: timeRange, limit: limit })
+      .then((response) => {
         setTracks(response.items);
         setIsloading(false);
       })
@@ -32,14 +64,24 @@ function TopTracks() {
     const accessToken = params.get("access_token");
     if (accessToken) {
       spotifyApi.setAccessToken(accessToken);
-      getTopTracks("long_term");
+      getTopTracks("long_term", limitTracks);
     }
   }, []);
 
+  const getTopTracksOfLimit = (newLimit: number) => {
+    setLimitTracks(newLimit)
+    getTopTracks(typeTime, newLimit)
+  }
+
+  const getTopTracksOfTimeRange = (newTimeRange: TimeRange) => {
+    setTypeTime(newTimeRange)
+    getTopTracks(newTimeRange, limitTracks)
+  }
+
   return (
     <>
-      <div className="px-5 xs:px-10 text-white h-full">
-        <div className="w-full flex justify-center pt-8">
+      <div className="xs:px-[400px] text-white h-full">
+        <div className="w-full flex justify-center pt-5">
           <h1 className="text-[20px] xs:text-4xl">Your Top Spotify tracks</h1>
         </div>
         {isLoading ? (
@@ -48,8 +90,24 @@ function TopTracks() {
           <>
             <div className="w-full flex justify-center pt-8">
               <span
+                className={`px-4 ${limitTracks === 5 && "selectedTime"}`}
+                onClick={() => getTopTracksOfLimit(5)}
+              >
+                Top 5
+              </span>
+              <span
+                className={`px-4 ${
+                  limitTracks === 10 &&  "selectedTime"
+                }`}
+                onClick={() => getTopTracksOfLimit(10)}
+              >
+                Top 10
+              </span>
+            </div>
+            <div className="w-full flex justify-center pt-8 mb-12">
+              <span
                 className={`px-4 ${typeTime === "long_term" && "selectedTime"}`}
-                onClick={() => getTopTracks("long_term")}
+                onClick={() => getTopTracksOfTimeRange("long_term")}
               >
                 All time
               </span>
@@ -57,7 +115,7 @@ function TopTracks() {
                 className={`px-4 ${
                   typeTime === "short_term" && "selectedTime"
                 }`}
-                onClick={() => getTopTracks("short_term")}
+                onClick={() => getTopTracksOfTimeRange("short_term")}
               >
                 Weekend
               </span>
@@ -65,15 +123,18 @@ function TopTracks() {
                 className={`px-4 ${
                   typeTime === "medium_term" && "selectedTime"
                 }`}
-                onClick={() => getTopTracks("medium_term")}
+                onClick={() => getTopTracksOfTimeRange("medium_term")}
               >
                 Mouth
               </span>
             </div>
-            <div className="grid semi-md:grid-cols-3 sm:grid-cols-2 gap-6 my-8">
-              {tracks.map((tracks: Tracks, index) => (
+            <div className="flex flex-col bg-black p-5" ref={domEl}>
+              <div className="w-full flex justify-center text-2xl">
+              <h3 className="mb-4"> My Top {showTypeTime()} Tracks</h3>
+              </div>
+              {tracks.map((tracks, index) => (
                 <>
-                  <CardTracks
+                  <TopFiveTracks
                     id={tracks.id}
                     artistName={tracks.artists[0].name}
                     trackName={tracks.name}
@@ -83,7 +144,16 @@ function TopTracks() {
                   />
                 </>
               ))}
+              <div className="w-full flex justify-center text-2xl">
+              <SpotifyIcon width="35" height="35" fill="#fff" />
+              <span className="ml-2">
+              Spotify
+                </span>
+              </div>
             </div>
+            <div className="w-full flex justify-center">
+               <button onClick={handleCapture} className="text-white px-4 rounded-md bg-blue-600">Download</button>     
+              </div>
           </>
         )}
       </div>

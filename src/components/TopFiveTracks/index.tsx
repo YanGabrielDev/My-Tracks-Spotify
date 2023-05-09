@@ -6,7 +6,7 @@ export interface CardTracks {
   trackImage: string;
   artistName: string;
 }
-export const CardTracks = ({
+export const TopFiveTracks = ({
   artistName,
   id,
   positionTrack,
@@ -14,12 +14,12 @@ export const CardTracks = ({
   trackName,
 }: CardTracks) => {
   return (
-    <div key={id} className="flex items-center">
-      <span className="text-[20px] xs:text-4xl w-10">{positionTrack + 1}</span>
-      <div className='flex'>
-      <img className="h-24 ml-4 mr-4 cardImage" alt={artistName} src={trackImage} />
+    <div key={id} className="flex items-center mb-4 w-full">
+      <span className="text-[20px] xs:text-3xl w-10 text-center">{positionTrack + 1}</span>
+      <div className='flex w-full'>
+      <img className="h-20 ml-4 mr-4 cardImage" alt={artistName} src={trackImage} />
       </div>
-      <div className="flex flex-col semi-md:max-w-[10rem] break-words sm:max-w-[10rem] w-full fold:max-w-[6rem]">
+      <div className="flex flex-col w-full">
         <span className="sm:text-base text-sm">{trackName}</span>
         <span className="sm:text-base text-sm">{artistName}</span>
       </div>
